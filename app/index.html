@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Internal Employee Directory</title>
+
+<!-- Latest Bootstap files -->
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" href="css/style.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<!-- Angular cloud link -->
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+
+</head>
+<!-- directive initializes for Directory App -->
+<body ng-app="directoryApp" ng-controller="recordCtrl">
+<div class="container">
+    <h2>Internal Employee Directory</h2>
+    <!-- search module to call upon filtering search record -->
+    <form>
+       <input type="text" class="form-control" placeholder="Search a Employee" ng-model="searchRecord">
+    </form>
+    <hr>
+    <!-- Edit user button -->
+    <div class="text-right" style="padding-bottom:20px">
+        <button class="btn btn-success" ng-click="editUser('new')">
+            <span class="glyphicon glyphicon-user"></span>  <span class="glyphicon glyphicon-plus"></span>
+        </button>
+    </div><!-- end edit user button -->
+    <!-- Create / Edit User -->
+    <div class="container-fluid remove-all-padding">
+        
+                <div id="userInfo" class="panel panel-primary" ng-hide="hide">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-sm-11"> 
+                            	<h4 ng-show="edit">Create New User:</h4>
+                            	<h4 ng-hide="edit">Edit User:</h4>
+                            </div>
+                            <div class="col-sm-1 text-right"> 
+                                <button class="btn btn-info" ng-click="closeWindow()">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <form name="userForm" class="form-vertical" ng-submit="submitForm(userForm.$valid)" novalidate>
+                        	<!-- add novalidate prevents HTML5 validation that cause chrome console log error -->
+                            <input type="hidden" name="myId" ng-value="myId" />
+                            <div class="row">
+                            	<div class="col-md-6"> 
+                                	<div class="form-group" ng-class="{ 'has-error' : userForm.Name.$invalid && !userForm.Name.$pristine && submitted }">
+                                      <label class="control-label">Name:</label>
+                                      <input type="text" ng-model="Name" placeholder="Name" name="Name" class="form-control" required>
+                                      <span class="label label-danger" ng-show="userForm.Name.$error.required && isFormSubmit">
+                                        Name is required.
+                                      </span>
+                                    </div><!-- form group -->
+                                </div>
+                                <div class="col-md-6"> 
+                                	<div class="form-group">
+                                      <label class="control-label">Email</label>
+                                      <input type="email" ng-model="Email" placeholder="Email" name="Email" class="form-control" required>
+                                      <span class="label label-danger" ng-show="userForm.Email.$error.required && isFormSubmit">
+                                      	Email is required.
+                                      </span>
+                                      <span class="label label-danger" ng-show="userForm.Email.$error.email && isFormSubmit">
+                                      	Invalid email address.
+                                      </span>
+                                    </div><!-- form group -->
+                                </div>
+                            </div><!-- row -->
+                            <div class="row">
+            					<div class="col-md-4">
+                                	<div class="form-group">
+                                      <label class="control-label">Job Title</label>
+                                      <input type="text" ng-model="JobTitle" placeholder="Job Title" name="JobTitle" class="form-control" required>
+                                      <span class="label label-danger" ng-show="userForm.JobTitle.$error.required && isFormSubmit">
+                                      	Job Title is required.
+                                      </span>
+                                    </div><!-- form group -->    
+                            	</div>
+            					<div class="col-md-4">        
+                                	<div class="form-group">
+                                      <label class="control-label">Phone Number</label>
+                                      <input type="text" ng-model="PhoneNumber" placeholder="Phone Number" name="PhoneNumber" class="form-control" required>
+                                      <span class="label label-danger" ng-show="userForm.PhoneNumber.$error.required && isFormSubmit">
+                                      	Phone Number is required.
+                                      </span>
+                                    </div><!-- form group -->    
+                            	</div>
+                                <div class="col-md-4"> 
+                                	<div class="form-group">
+                                      <label class="control-label">Location</label>
+                                      <input type="text" ng-model="Location" placeholder="Location" name="Location" class="form-control" required>
+                                      <span class="label label-danger" ng-show="userForm.Location.$error.required && isFormSubmit">
+                                      	Location is required.
+                                      </span>
+                                    </div><!-- form group -->
+                                </div>
+                            </div><!-- row --> 
+                            <div class="text-right">
+                                <button class="btn btn-success" type="submit">
+                                    <span class="glyphicon glyphicon-save"></span>  Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div><!-- user info -->
+    </div>
+    <!-- End Create / Edit User -->
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <!-- apply sorting method on click event -->
+          <th class="text-uppercase"><a href="#" ng-click="sortType = 'Name'; sortReverse = !sortReverse">Name</a></th>
+          <th class="text-uppercase"><a href="#" ng-click="sortType = 'JobTitle'; sortReverse = !sortReverse">Job Title</a></th>
+          <th class="text-uppercase"><a href="#" ng-click="sortType = 'Location'; sortReverse = !sortReverse">Location</a></th>
+          <th class="text-uppercase"><a href="#" ng-click="sortType = 'Email'; sortReverse = !sortReverse">Email</a></th>
+          <th class="text-uppercase">Phone Number</th>
+          <th class="text-uppercase">&nbsp;</th>
+        </tr>
+      </thead>
+      <tr ng-repeat="employee in records | orderBy:sortType:sortReverse | filter:searchRecord">
+        <td>{{ employee.Name }}</td>
+        <td>{{ employee.JobTitle }}</td>
+        <td>{{ employee.Location }}</td>
+        <td>{{ employee.Email }}</td>
+        <td>{{ employee.PhoneNumber }}</td>
+        <td>
+        	<button class="btn" ng-click="editUser(employee.id)">
+              <span class="glyphicon glyphicon-pencil"></span>  Edit
+            </button>
+            <button class="btn btn-danger" ng-click="deleteUser(employee.id)">
+              <span class="glyphicon glyphicon-minus"></span>  Delete
+            </button>
+        </td>
+      </tr>
+    </table>  
+</div><!-- container -->
+<script src="js/controllers.js"></script>
+<script src="lib/angular/angular-record.js"></script>
+</body>
+</html>
