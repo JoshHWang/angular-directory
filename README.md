@@ -1,10 +1,10 @@
-# angular-directory
+# Internal Employee Directory
 
 Using Angular.js to create a company directory that allow user to search, edit, create and delete employee
 
 # Directory Root
 
-The directory doesn't have any index file, the index file are nest within the app folder.
+The directory doesn't have any index file, the index file are nest within the app folder.  [Click Here](https://github.com/JoshHWang/angular-directory/blob/master/app/index.html)
 
 The GitHub location click here: [Link](https://github.com/JoshHWang/angular-directory)
 
