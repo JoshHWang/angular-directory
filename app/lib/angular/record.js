@@ -1,13 +1,11 @@
 // JavaScript Document
 
-app.controller("recordCtrl", function($scope, $http){	
+app.controller("recordCtrl", ['$scope', 'records', function($scope, records){	
    // load from a web services somewhere
    
-   $http.get("http://private-1f087-directoryapi.apiary-mock.com/directoryapi/")
-   .success(function(data, status, headers, config) {
-      // Default data (loaded from a database)
-	  $scope.records = data;
-	  //console.log($scope.records);
+    // HTTP Service Calls In
+   records.getRecords(function(data) {
+      $scope.records = data;
    });
    
    // Simple sort method and filter search
@@ -136,6 +134,6 @@ app.controller("recordCtrl", function($scope, $http){
    
    
    
-});
+}]);
 
 
