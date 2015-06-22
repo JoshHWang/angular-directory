@@ -8,6 +8,8 @@ The directory doesn't have any index file, the index file are nest within the ap
 
 The GitHub location click here: [Link](https://github.com/JoshHWang/angular-directory)
 
+Click here for [Demo](http://embed.plnkr.co/otsrDFkvZHMBo3lMDdga/preview)
+
 ## Instruction
 
 * Use the "Search a Employee" input field to filter and search the employee you are looking for.
